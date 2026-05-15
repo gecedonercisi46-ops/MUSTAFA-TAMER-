@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mustafa Tamer | YouTube Kanalı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root { --primary: #ff0000; --dark: #0a0a0a; --glass: rgba(255,255,255,0.05); --border: rgba(255,0,0,0.4); }
+        #welcome-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
+        .welcome-content h2 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 20px; color: #fff; margin-bottom: 30px; letter-spacing: 1px; padding: 0 20px; text-transform: uppercase; }
+        .menu-view-btn { font-family: 'Bebas Neue', cursive; font-size: 24px; padding: 15px 40px; background: var(--primary); color: #000; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 20px rgba(255,0,0,0.4); transition: 0.3s; }
+        .menu-view-btn:active { transform: scale(0.9); }
+        .hide-welcome { transform: translateY(-100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--dark); color: #fff; overflow-x: hidden; width: 100%; }
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1974&auto=format&fit=crop'); background-size: cover; background-position: center; }
+        #emoji-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        header { height: 40vh; min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .logo-box { border: 3px solid var(--primary); padding: 25px 35px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border-radius: 15px; }
+        .logo-text { font-family: 'Bebas Neue', cursive; font-size: clamp(40px, 12vw, 75px); line-height: 0.9; background: linear-gradient(to bottom, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 0 20px 200px; }
+        .section-header { text-align: center; margin: 50px 0 25px; position: relative; }
+        .section-header h2 { font-family: 'Bebas Neue', cursive; font-size: 28px; color: var(--primary); background: var(--dark); padding: 0 15px; display: inline-block; position: relative; z-index: 2; }
+        .section-header::after { content: ""; position: absolute; left: 0; top: 55%; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent); }
+        .comment-card { background: var(--glass); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .comment-author { font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--primary); margin-bottom: 8px; }
+        .comment-text { line-height: 1.5; }
+        .comment-time { font-size: 12px; color: #aaa; margin-top: 10px; }
+        .add-comment-btn { background: var(--primary); color: #000; border: none; border-radius: 50px; padding: 12px 25px; font-family: 'Bebas Neue', cursive; font-size: 20px; cursor: pointer; width: 100%; margin-top: 20px; }
+        .stat-card, .link-card, .visitor-card { background: var(--glass); border: 1px solid var(--border); border-radius: 15px; padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; transition: 0.1s; cursor: pointer; }
+        .stat-card:active, .link-card:active, .visitor-card:active { transform: scale(0.95); }
+        .stat-left { display: flex; align-items: center; gap: 12px; }
+        .stat-left i { font-size: 24px; color: var(--primary); }
+        .stat-left .label { font-weight: 700; font-size: 16px; }
+        .stat-right { font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--primary); min-width: 80px; text-align: right; }
+        .link-card { justify-content: center; gap: 10px; font-family: 'Bebas Neue', cursive; font-size: 22px; color: #fff; text-decoration: none; }
+        .link-card i { font-size: 24px; }
+        .visitor-card { border-color: #ffd700; }
+        .visitor-card .visitor-left i { color: #ffd700; }
+        .visitor-card .visitor-right { font-family: 'Bebas Neue', cursive; font-size: 30px; color: #ffd700; }
+        .order-wrapper { position: fixed; bottom: 20px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 999; pointer-events: none; }
+        .order-nav { pointer-events: auto; width: 90%; max-width: 380px; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: 0.3s; background: linear-gradient(135deg, #ff0000, #cc0000); color: #fff; padding: 14px 20px; flex-direction: column; }
+        .order-nav:active { transform: scale(0.95); }
+        .btn-tel { font-family: 'Bebas Neue', cursive; font-size: 28px; line-height: 1; }
+        .footer-space { height: 100px; }
+    </style>
+</head>
+<body>
+    <!-- Karşılama Ekranı -->
+    <div id="welcome-screen">
+        <div class="welcome-content">
+            <div class="animate__animated animate__fadeInDown">
+                <h1 style="font-family:'Bebas Neue'; font-size: 60px; color: var(--primary); margin-bottom: 10px;">MUSTAFA TAMER</h1>
+            </div>
+            <h2 class="animate__animated animate__fadeInUp animate__delay-1s">Abone Ol, Bildirimi Aç, Kaçırma!</h2>
+            <button class="menu-view-btn animate__animated animate__pulse animate__infinite" onclick="openMenu()">KANALI KEŞFET 🚀</button>
+        </div>
+    </div>
+
+    <!-- Arkaplan & Emoji Canvas -->
+    <div class="bg-fixed"></div>
+    <canvas id="emoji-canvas"></canvas>
+
+    <!-- Başlık -->
+    <header>
+        <div class="logo-box">
+            <h1 class="logo-text">MUSTAFA TAMER</h1>
+            <p style="color:var(--primary); font-family:'Bebas Neue'; font-size:18px; letter-spacing:4px;">🎬 YOUTUBE KANALI</p>
+        </div>
+    </header>
+
+    <!-- Ana İçerik -->
+    <div class="container">
+        <!-- Kanal İstatistikleri -->
+        <div class="section-header"><h2>📊 KANAL DURUMU</h2></div>
+        <div class="stat-card" onclick="createBurst(event)">
+            <div class="stat-left"><i class="fas fa-users"></i><span class="label">Abone</span></div>
+            <div class="stat-right" id="subscriberCount">Yükleniyor...</div>
+        </div>
+        <div class="stat-card" onclick="createBurst(event)">
+            <div class="stat-left"><i class="fas fa-video"></i><span class="label">Video</span></div>
+            <div class="stat-right" id="videoCount">-</div>
+        </div>
+        <div class="stat-card" onclick="createBurst(event)">
+            <div class="stat-left"><i class="fas fa-eye"></i><span class="label">Görüntülenme</span></div>
+            <div class="stat-right" id="viewCount">-</div>
+        </div>
+        <div class="stat-card" onclick="createBurst(event)">
+            <div class="stat-left"><i class="fas fa-thumbs-up"></i><span class="label">Beğeni (son video)</span></div>
+            <div class="stat-right" id="likeCount">-</div>
+        </div>
+
+        <!-- Yorum Bölümü -->
+        <div class="section-header"><h2>💬 YORUMLAR</h2></div>
+        <div id="comments-container"></div>
+        <button class="add-comment-btn" onclick="showCommentForm()">YORUM EKLE</button>
+
+        <!-- Yorum Formu (gizli) -->
+        <div id="comment-form" style="display: none; margin-top: 20px;">
+            <input type="text" id="comment-name" placeholder="İsminiz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); border-radius: 10px; color: white;">
+            <textarea id="comment-text" placeholder="Yorumunuz..." style="width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); border-radius: 10px; color: white; height: 80px;"></textarea>
+            <button class="add-comment-btn" onclick="saveComment()">GÖNDER</button>
+        </div>
+
+        <!-- Ziyaretçi Sayacı -->
+        <div class="section-header"><h2>👁️ TOPLAM ZİYARETÇİ</h2></div>
+        <div class="visitor-card" onclick="createBurst(event)">
+            <div class="visitor-left"><i class="fas fa-globe"></i><span class="label">Ziyaretçi</span></div>
+            <div class="visitor-right" id="visitorCount">Hesaplanıyor...</div>
+        </div>
+
+        <!-- Bağlantılar -->
+        <div class="section-header"><h2>🔗 BAĞLANTILAR</h2></div>
+        <a href="https://youtube.com/@mustafatamer.8001?sub_confirmation=1" target="_blank" class="link-card" onclick="createBurst(event)">
+            <i class="fab fa-youtube" style="color:#ff0000;"></i> ABONE OL
+        </a>
+        <a href="https://youtube.com/@mustafatamer.8001" target="_blank" class="link-card" onclick="createBurst(event)">
+            <i class="fas fa-bell" style="color:#ffd700;"></i> KANAL SAYFASI
+        </a>
+        <a href="https://www.youtube.com/@mustafatamer.8001/videos" target="_blank" class="link-card" onclick="createBurst(event)">
+            <i class="fas fa-play-circle" style="color:#00ff88;"></i> TÜM VİDEOLAR
+        </a>
+
+        <div class="footer-space"></div>
+    </div>
+
+    <!-- Sabit Alt Buton (ABONE OL) -->
+    <div class="order-wrapper">
+        <a href="https://youtube.com/@mustafatamer.8001?sub_confirmation=1" target="_blank" class="order-nav">
+            <span style="font-size:10px; font-weight:900; letter-spacing:2px; margin-bottom: 2px;">📢 KANALIMA KATIL</span>
+            <span class="btn-tel">ABONE OL</span>
+        </a>
+    </div>
+
+    <script>
+        function openMenu() { document.getElementById('welcome-screen').classList.add('hide-welcome'); }
+
+        // ============ KENDİ YOUTUBE API BİLGİLERİNİZ ============
+        const apiKey = 'AIzaSy...';  // YouTube Data API v3 anahtarı
+        const channelId = 'UC_x5XG1OV2P6uZZ5FSM9Ttw'; // Kanal ID'niz
+        // =======================================================
+
+        // 1. YouTube istatistiklerini çek
+        async function fetchStats() {
+            try {
+                const url = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.items && data.items.length > 0) {
+                    const s = data.items[0].statistics;
+                    document.getElementById('subscriberCount').textContent = formatNum(parseInt(s.subscriberCount));
+                    document.getElementById('videoCount').textContent = formatNum(parseInt(s.videoCount));
+                    document.getElementById('viewCount').textContent = formatNum(parseInt(s.viewCount));
+                } else throw new Error('Veri yok');
+            } catch (e) {
+                console.error('İstatistik hatası:', e);
+                document.getElementById('subscriberCount').textContent = '---';
+                document.getElementById('videoCount').textContent = '---';
+                document.getElementById('viewCount').textContent = '---';
+            }
+        }
+
+        // 2. Son video beğenisini çek
+        async function fetchVideoLikes() {
+            try {
+                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&order=date&maxResults=1&key=${apiKey}`;
+                const searchRes = await fetch(searchUrl);
+                const searchData = await searchRes.json();
+                
+                if (searchData.items && searchData.items.length > 0) {
+                    const videoId = searchData.items[0].id.videoId;
+                    
+                    // Video istatistiklerini al
+                    const statsUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`;
+                    const statsRes = await fetch(statsUrl);
+                    const statsData = await statsRes.json();
+                    
+                    if (statsData.items && statsData.items.length > 0) {
+                        const likes = parseInt(statsData.items[0].statistics.likeCount);
+                        document.getElementById('likeCount').textContent = formatNum(likes);
+                    } else {
+                        document.getElementById('likeCount').textContent = '0';
+                    }
+                } else {
+                    document.getElementById('likeCount').textContent = '0';
+                }
+            } catch (e) {
+                console.error('Beğeni hatası:', e);
+                document.getElementById('likeCount').textContent = '0';
+            }
+        }
+
+        // 3. Yorumları localStorage'tan yükle
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('channelComments')) || [];
+            const container = document.getElementById('comments-container');
+            container.innerHTML = '';
+            
+            // Son 10 yorumu göster
+            const recentComments = comments.slice(-10);
+            recentComments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment-card';
+                commentDiv.innerHTML = `
+                    <div class="comment-author">${comment.name}</div>
+                    <div class="comment-text">${comment.text}</div>
+                    <div class="comment-time">${formatTime(comment.time)}</div>
+                `;
+                container.appendChild(commentDiv);
+            });
+        }
+
+        // 4. Yorum formunu göster
+        function showCommentForm() {
+            document.getElementById('comment-form').style.display = 'block';
+        }
+
+        // 5. Yorum kaydet
+        function saveComment() {
+            const name = document.getElementById('comment-name').value.trim();
+            const text = document.getElementById('comment-text').value.trim();
+            
+            if (!name || !text) {
+                alert('Lütfen isim ve yorum girin');
+                return;
+            }
+            
+            // Yorum objesi oluştur
+            const comment = {
+                name: name,
+                text: text,
+                time: new Date().toISOString()
+            };
+            
+            // Mevcut yorumları al
+            const comments = JSON.parse(localStorage.getItem('channelComments')) || [];
+            comments.push(comment);
+            
+            // Yeni yorumu localStorage'e kaydet
+            localStorage.setItem('channelComments', JSON.stringify(comments));
+            
+            // Formu gizle ve yorumları yeniden yükle
+            document.getElementById('comment-form').style.display = 'none';
+            document.getElementById('comment-name').value = '';
+            document.getElementById('comment-text').value = '';
+            
+            loadComments();
+        }
+
+        // 6. Tarih formatlama
+        function formatTime(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleDateString('tr-TR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Sayı formatlama (B, M)
+        function formatNum(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + ' M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + ' B';
+            return num.toString();
+        }
+
+        // Başlangıçta çalıştır
+        fetchStats();
+        fetchVideoLikes();
+        loadComments();
+
+        // Ziyaretçi Sayacı (localStorage)
+        function getVisitorCount() {
+            return parseInt(localStorage.getItem('visitorCount')) || 0;
+        }
+        function setVisitorCount(count) {
+            localStorage.setItem('visitorCount', count);
+            document.getElementById('visitorCount').textContent = formatNum(count);
+        }
+        window.addEventListener('load', () => {
+            let current = getVisitorCount();
+            current += 1;
+            setVisitorCount(current);
+        });
+
+        // Emoji Patlama Efekti (kırmızı 👍)
+        const canvas = document.getElementById('emoji-canvas'), ctx = canvas.getContext('2d');
+        let emojis = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+
+        class Emoji {
+            constructor(x, y, isBurst = false) {
+                this.x = x; this.y = y;
+                this.size = Math.random() * 25 + 20;
+                this.speedX = (Math.random() - 0.5) * (isBurst ? 10 : 1.5);
+                this.speedY = isBurst ? (Math.random() * -18 - 5) : (Math.random() * -2 - 1);
+                this.opacity = 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 10;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += 0.2;
+                this.opacity -= 0.01;
+                this.rotation += this.rotationSpeed;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.globalAlpha = Math.max(0, this.opacity);
+                ctx.font = `${this.size}px serif`;
+                ctx.fillStyle = '#ff0000';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('👍', 0, 0);
+                ctx.restore();
+            }
+        }
+
+        function createBurst(e) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX || rect.left + rect.width/2;
+            const y = e.clientY || rect.top + rect.height/2;
+            for (let i = 0; i < 15; i++) emojis.push(new Emoji(x, y, true));
+        }
+
+        setInterval(() => {
+            if (Math.random() < 0.2) emojis.push(new Emoji(Math.random() * canvas.width, -30));
+        }, 500);
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < emojis.length; i++) {
+                emojis[i].update();
+                emojis[i].draw();
+                if (emojis[i].opacity <= 0 || emojis[i].y > canvas.height + 50) {
+                    emojis.splice(i, 1); i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
